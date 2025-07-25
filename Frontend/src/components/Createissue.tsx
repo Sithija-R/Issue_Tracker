@@ -33,7 +33,6 @@ type IssueFormProps = {
 };
 
 const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
-  const navigate = useNavigate();
   const addIssue = useIssueStore((state) => state.addIssue);
   const updateIssue = useIssueStore((state) => state.updateIssue);
   const deleteIssue = useIssueStore((state) => state.deleteIssue);
@@ -41,8 +40,8 @@ const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
   const [formData, setFormData] = useState<Issue>({
     title: "",
     description: "",
-    priority: "",
-    status: "",
+    priority: "Low",
+    status: "Open",
     assignee: "",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

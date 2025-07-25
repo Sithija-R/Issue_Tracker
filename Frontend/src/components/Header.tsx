@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 
 import { useNavigate } from "react-router-dom";
-import { LogOut, Plus, Settings, User, Bug } from "lucide-react";
+import { LogOut, Settings, User, Bug } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,16 +11,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ModeToggle } from "./ThemeToggle";
+import { useAuthStore } from "@/store/Authstore";
 
 export function Header() {
   const navigate = useNavigate();
+  const logout = useAuthStore((state)=> state.logout);
 
   const handleLogout = () => {
+    logout();
     navigate("/login");
+   
   };
 
   return (
-    <header className="sticky bg-gradientcard1/60   top-0 z-50 w-full border-b border-border/50 backdrop-blur">
+    <header className="fixed bg-gradientcard1   top-0 z-50 w-full border-b border-border/50 backdrop-blur">
       <div className="flex h-16 items-center justify-between px-4 lg:px-20">
         <div className="flex items-center space-x-6">
           <div className="flex items-center space-x-2">
@@ -67,7 +71,7 @@ export function Header() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="w-56 bg-popover/80 backdrop-blur-glass border-border/50"
+              className="w-56 bg-background   backdrop-blur-glass border-border/50"
               align="end"
             >
               <div className="flex items-center justify-start gap-2 p-2">
@@ -77,15 +81,7 @@ export function Header() {
                 </div>
               </div>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                <User className="mr-2 h-4 w-4" />
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
+             
               <DropdownMenuItem
                 className="cursor-pointer text-destructive focus:text-destructive"
                 onClick={handleLogout}
@@ -93,6 +89,7 @@ export function Header() {
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign out
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

@@ -207,10 +207,12 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+   
+
+    <div className="min-h-screen bg-background mt-20 ">
       <Header />
 
-      <div className="container mx-auto px-4 py-8 h-80">
+      <div className="container mx-auto px-4 py-8 h-80 ">
      
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {cardStat.map((item) => (
@@ -280,7 +282,7 @@ export default function Dashboard() {
                 <SelectTrigger className="w-full sm:w-[180px] bg-input/50 border-border/50">
                   <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-background  ">
                   <SelectItem value="All">All Statuses</SelectItem>
                   <SelectItem value="Open">Open</SelectItem>
                   <SelectItem value="Resolved">Resolved</SelectItem>
@@ -294,7 +296,7 @@ export default function Dashboard() {
                 <SelectTrigger className="w-full sm:w-[180px] bg-input/50 border-border/50">
                   <SelectValue placeholder="Filter by priority" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-background  ">
                   <SelectItem value="All">All Priorities</SelectItem>
                   <SelectItem value="Low">Low</SelectItem>
                   <SelectItem value="Medium">Medium</SelectItem>
@@ -334,7 +336,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 pb-20">
             {filteredIssues.map((issue) => (
               <IssueCard key={issue.id} issue={issue} />
             ))}
@@ -342,5 +344,6 @@ export default function Dashboard() {
         )}
       </div>
     </div>
+    
   );
 }
