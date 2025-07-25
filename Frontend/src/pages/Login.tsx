@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Eye, EyeOff, LogIn, Lock, Mail } from 'lucide-react';
 import { useAuthStore } from '@/store/Authstore';
 import { toast } from 'sonner';
+import { useAuth } from '@/lib/hooks/UseAuth';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ export default function Login() {
   const [errors, setErrors] = useState<{email?: string; password?: string}>({});
   
   const navigate = useNavigate();
-  const login = useAuthStore((state) => state.login);
+  const { loginUser } = useAuth();
 
 
   const validateForm = () => {
@@ -49,23 +50,11 @@ export default function Login() {
     setErrors({});
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock successful login
-      const mockUser = {
-        id: '1',
-        name: email.split('@')[0],
-        email: email,
-      };
-      
-      const mockToken = 'mock-jwt-token';
-      login(mockUser, mockToken);
-      
+     
+      await loginUser(email, password);
       toast.success("Welcome back!",{
         description: "You have been successfully logged in.",
       });
-      
       navigate('/dashboard');
     } catch (error) {
       toast.error("Login failed",{

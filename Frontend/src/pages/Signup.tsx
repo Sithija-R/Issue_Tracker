@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, EyeOff, UserPlus, Lock, Mail, User } from "lucide-react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/Authstore";
+import { useAuth } from "@/lib/hooks/UseAuth";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ const Signup = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const navigate = useNavigate();
-  const login = useAuthStore((state) => state.login);
+  const { registerUser } = useAuth(); 
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -62,21 +63,11 @@ const Signup = () => {
     setErrors({});
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const mockUser = {
-        id: "1",
-        name: formData.name,
-        email: formData.email,
-      };
-
-      const mockToken = "mock-jwt-token";
-      login(mockUser, mockToken);
-
+      await registerUser(formData.name, formData.email, formData.password);
+      
       toast.success("Registered Successfully!", {
         description: "Your account has been created successfully.",
       });
-
       navigate("/dashboard");
     } catch (error) {
       toast.error("Signup failed", {
