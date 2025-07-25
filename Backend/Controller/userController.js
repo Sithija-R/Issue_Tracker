@@ -9,7 +9,7 @@ const userRegister = async (req, res) => {
     if (user) {
       return res.status(400).json({ message: "Email already exists" });
     }
-    const salt = await bcrypt.getSalt(9);
+    const salt = await bcrypt.genSalt(9);
     const hashedPWD = await bcrypt.hash(password, salt);
     user = new User({ name, email, password: hashedPWD });
     await user.save();
