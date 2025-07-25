@@ -1,16 +1,17 @@
 import { create } from "zustand";
 
-export type issuestatus = 'Resolved' | 'Closed';
+export type issuestatus = 'Resolved' | 'Closed' | 'Open' ;
 export type issuepriority = 'Low' | 'Medium' | 'High' ;
 
 export type Issue = {
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-    priority: string;
-    assignee?: string;
-    updatedAt: string;
+  id?: string;
+  title: string;
+  description: string;
+  priority?: string;
+  status?: string;
+  assignee?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 type IssueStore ={

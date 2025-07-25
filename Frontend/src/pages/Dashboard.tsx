@@ -28,6 +28,9 @@ import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { IssueCard } from "@/components/Issuecard";
 import { useIssueStore } from "@/store/Issuestore";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import Createissue from "@/components/Createissue";
+
 
 // Mock data for initial load
 const mockIssues = [
@@ -124,7 +127,7 @@ export default function Dashboard() {
   const statusCounts = {
     total: issues.length,
     open: issues.filter((i) => i.status === "Open").length,
-    inProgress: issues.filter((i) => i.status === "In Progress").length,
+    closed: issues.filter((i) => i.status === "Closed").length,
     resolved: issues.filter((i) => i.status === "Resolved").length,
   };
 
@@ -155,8 +158,8 @@ export default function Dashboard() {
     },
     {
       icon: <Clock className="h-6 w-6 text-rose-500" />,
-      label: "In Progress",
-      value: statusCounts.inProgress,
+      label: "Closed",
+      value: statusCounts.closed,
       colorClass: "rose-500",
       bgClass: "bg-rose-500/20",
       hoverBorderClass: "hover:border-rose-500/30",
@@ -204,10 +207,12 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+   
+
+    <div className="min-h-screen bg-background mt-20 ">
       <Header />
 
-      <div className="container mx-auto px-4 py-8 h-80">
+      <div className="container mx-auto px-4 py-8 h-80 ">
      
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {cardStat.map((item) => (
@@ -232,7 +237,7 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* Filters and Actions */}
+
         <Card className="mb-6 bg-gradient-to-r from-gradientcard1 to-gradientcard2  border-border/50">
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -242,13 +247,21 @@ export default function Dashboard() {
                   Manage and track all issues in your project
                 </CardDescription>
               </div>
+              <Dialog>
+                <DialogTrigger asChild>
+
               <Button
-                onClick={() => navigate("/issues/new")}
+                
                 className=" bg-gradient-to-r from-gradient1 to-gradient2 hover:opacity-90 transition-all duration-200 cursor-pointer p-5 text-lg font-semibold "
               >
                 <Plus className="h-4 w-4 mr-2" />
                 New Issue
               </Button>
+                </DialogTrigger>
+                <DialogContent className="min-w-[60%] p-6 rounded-2xl shadow-xl   border max-h-[90%] overflow-y-scroll">
+                  <Createissue mode="create" />
+                </DialogContent>
+              </Dialog>
             </div>
           </CardHeader>
           <CardContent>
@@ -269,7 +282,7 @@ export default function Dashboard() {
                 <SelectTrigger className="w-full sm:w-[180px] bg-input/50 border-border/50">
                   <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-background  ">
                   <SelectItem value="All">All Statuses</SelectItem>
                   <SelectItem value="Open">Open</SelectItem>
                   <SelectItem value="Resolved">Resolved</SelectItem>
@@ -283,7 +296,7 @@ export default function Dashboard() {
                 <SelectTrigger className="w-full sm:w-[180px] bg-input/50 border-border/50">
                   <SelectValue placeholder="Filter by priority" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-background  ">
                   <SelectItem value="All">All Priorities</SelectItem>
                   <SelectItem value="Low">Low</SelectItem>
                   <SelectItem value="Medium">Medium</SelectItem>
@@ -323,7 +336,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 pb-20">
             {filteredIssues.map((issue) => (
               <IssueCard key={issue.id} issue={issue} />
             ))}
@@ -331,5 +344,6 @@ export default function Dashboard() {
         )}
       </div>
     </div>
+    
   );
 }
