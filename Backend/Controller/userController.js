@@ -17,9 +17,15 @@ const userRegister = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "20d",
     });
-    return res
-      .status(201)
-      .json({ message: "User registered successfully", token, user });
+    return res.status(201).json({
+      message: "User registered successfully",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email
+      }
+    });
   } catch (e) {
     return res
       .status(500)
@@ -30,7 +36,8 @@ const userRegister = async (req, res) => {
 const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    let user = User.findOne({ email });
+  
+    let user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password!" });
     }
@@ -42,9 +49,15 @@ const userLogin = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "20d",
     });
-    return res
-      .status(201)
-      .json({ message: "User logged in successfully", token, user });
+    return res.status(201).json({
+      message: "User registered successfully",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email
+      }
+    });
   } catch (e) {
     return res
       .status(500)

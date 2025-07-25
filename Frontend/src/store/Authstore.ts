@@ -8,7 +8,7 @@ export type User = {
 }
 
 type AuthStore ={
-    user:User | null;
+    user: User | null;
     isAuthenticated: boolean;
     token: string | null;
     setUser: (user: User) => void;
@@ -16,6 +16,8 @@ type AuthStore ={
     logout: () => void;
     
 }
+
+
 
 export const useAuthStore = create<AuthStore>()(
     persist(

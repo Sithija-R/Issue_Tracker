@@ -70,9 +70,7 @@ const Signup = () => {
       });
       navigate("/dashboard");
     } catch (error) {
-      toast.error("Signup failed", {
-        description: "Something went wrong. Please try again.",
-      });
+     console.error("Registration error:", error);
     } finally {
       setIsLoading(false);
     }

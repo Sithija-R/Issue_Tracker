@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { Eye, EyeOff, LogIn, Lock, Mail } from 'lucide-react';
-import { useAuthStore } from '@/store/Authstore';
 import { toast } from 'sonner';
 import { useAuth } from '@/lib/hooks/UseAuth';
 
@@ -57,11 +56,7 @@ export default function Login() {
       });
       navigate('/dashboard');
     } catch (error) {
-      toast.error("Login failed",{
-       
-        description: "Invalid email or password. Please try again.",
-       
-      });
+      console.error('Login error:', error);
     } finally {
       setIsLoading(false);
     }

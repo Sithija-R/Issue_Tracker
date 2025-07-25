@@ -15,13 +15,19 @@ import { useAuthStore } from "@/store/Authstore";
 
 export function Header() {
   const navigate = useNavigate();
-  const logout = useAuthStore((state)=> state.logout);
+  const { user, logout } = useAuthStore();
 
   const handleLogout = () => {
     logout();
     navigate("/login");
    
   };
+
+  const userInitials = user?.name
+  ?.split(' ')
+  .map(n => n[0])
+  .join('')
+  .toUpperCase() || 'U';
 
   return (
     <header className="fixed bg-gradientcard1   top-0 z-50 w-full border-b border-border/50 backdrop-blur">
@@ -36,22 +42,6 @@ export function Header() {
             </h1>
           </div>
 
-          {/* <nav className="hidden md:flex items-center space-x-6">
-            <Button
-              variant="ghost"
-              onClick={() => navigate("/dashboard")}
-              className="text-sm font-medium"
-            >
-              Dashboard
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => navigate("/issues")}
-              className="text-sm font-medium"
-            >
-              Issues
-            </Button>
-          </nav> */}
         </div>
 
         <div className="flex items-center space-x-3">
@@ -66,7 +56,7 @@ export function Header() {
                 className="relative h-9 w-9 rounded-lg bg-card/50 border border-border/50 hover:bg-accent/50"
               >
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-gradient-to-r from-gradient1 to-gradient2  text-primary-foreground text-xs font-medium"> S</AvatarFallback>
+                  <AvatarFallback className="bg-gradient-to-r from-gradient1 to-gradient2  text-primary-foreground text-xs font-medium">  {userInitials}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
@@ -76,8 +66,8 @@ export function Header() {
             >
               <div className="flex items-center justify-start gap-2 p-2">
                 <div className="flex flex-col space-y-1 leading-none">
-                  <p className="font-medium text-sm">name</p>
-                  <p className="text-xs text-muted-foreground">mail</p>
+                  <p className="font-medium text-sm">{user?.name}</p>
+                  <p className="text-xs text-muted-foreground">{user?.email}</p>
                 </div>
               </div>
               <DropdownMenuSeparator />
