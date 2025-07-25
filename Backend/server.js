@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/dbconfig");
 require("dotenv").config();
+const userRoutes = require("./Routes/userRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -10,6 +11,8 @@ app.use(express.json());
 app.get("/", (req,res) =>{
     res.send("Hello from backend");
 })
+
+app.use("/api/user", userRoutes);
 
 connectDB().then(()=>{
     app.listen(PORT,()=>{
