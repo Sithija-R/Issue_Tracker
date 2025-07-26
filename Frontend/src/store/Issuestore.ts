@@ -10,8 +10,8 @@ export type Issue = {
   priority?: string;
   status?: string;
   assignee?: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 type IssueStore ={
@@ -42,7 +42,7 @@ export const useIssueStore = create<IssueStore>((set, get) => ({
     updateIssue: (id, updates) =>
       set((state) => ({
         issues: state.issues.map((issue) =>
-          issue.id === id ? { ...issue, ...updates, updatedAt: new Date().toISOString() } : issue
+          issue.id === id ? { ...issue, ...updates } : issue
         ),
       })),
     deleteIssue: (id) =>

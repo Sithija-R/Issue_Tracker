@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Save, Edit, Trash } from "lucide-react";
 import { toast } from "sonner";
-import { useIssueStore, type Issue } from "@/store/Issuestore";
+import {  type Issue } from "@/store/Issuestore";
 import {
   Dialog,
   DialogClose,
@@ -25,6 +24,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import { useIssue } from "@/lib/hooks/useIssue";
 
 type IssueFormProps = {
   mode: "create" | "edit";
@@ -33,9 +33,7 @@ type IssueFormProps = {
 };
 
 const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
-  const addIssue = useIssueStore((state) => state.addIssue);
-  const updateIssue = useIssueStore((state) => state.updateIssue);
-  const deleteIssue = useIssueStore((state) => state.deleteIssue);
+  const { createIssue, updateIssue, deleteIssue } = useIssue();
 
   const [formData, setFormData] = useState<Issue>({
     title: "",
@@ -43,8 +41,6 @@ const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
     priority: "Low",
     status: "Open",
     assignee: "",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
     ...initialData,
   });
 
@@ -85,23 +81,21 @@ const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
     setIsLoading(true);
 
     try {
-      const now = new Date().toISOString();
 
       if (mode === "create") {
-        const newIssue: Issue = {
-          ...formData,
-          id: Date.now().toString(),
-          createdAt: now,
-          updatedAt: now,
-        };
-        addIssue(newIssue);
+        await createIssue(formData.title, formData.description, formData.priority, formData.status, formData.assignee );
+        toast.success("Issue created successfully!");
       } else {
         if (!formData.id) throw new Error("ID is missing");
-        const updates: Partial<Issue> = {
-          ...formData,
-          updatedAt: now,
-        };
-        updateIssue(formData.id, updates);
+       
+        await updateIssue(
+          formData.id,
+          formData.title,
+          formData.description,
+          formData.priority,
+          formData.status,
+          formData.assignee
+        );
       }
 
       toast.success(mode === "create" ? "Issue created!" : "Issue updated!", {
@@ -119,11 +113,11 @@ const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete =  async () => {
     setIsDeleteLoading(true);
     try {
       if (!formData.id) throw new Error("ID is missing");
-      deleteIssue(formData.id);
+      await deleteIssue(formData.id);
       toast.success("Issue deleted successfully!");
     } catch (err) {
       toast.error("Error", {
@@ -233,7 +227,7 @@ const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
                     <Button
                       type="button"
                       variant="destructive"
-                      className="flex-1"
+                      className="flex-1 cursor-pointer"
                       disabled={isDeleteLoading}
                     >
                       {isDeleteLoading ? (
@@ -275,7 +269,7 @@ const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
 
               <Button
                 type="submit"
-                className="flex-1 bg-gradient-to-r from-gradient1 to-gradient2"
+                className="flex-1 bg-gradient-to-r from-gradient1 to-gradient2 cursor-pointer"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -305,7 +299,7 @@ const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
                 <Button
                   type="button"
                   variant="outline"
-                  className="bg-card/50 border-border/50 hover:bg-accent/50"
+                  className="bg-card/50 border-border/50 hover:bg-accent/50 cursor-pointer"
                   disabled={isLoading}
                 >
                   Cancel

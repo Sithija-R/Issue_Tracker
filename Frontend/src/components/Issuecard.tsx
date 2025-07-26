@@ -37,7 +37,7 @@ export function IssueCard({ issue }: IssueCardProps) {
               className={`px-2 py-0.5 flex items-center justify-center rounded-xl text-xs whitespace-nowrap
           ${
             issue.status === "Open"
-              ? "bg-amber-500/10 text-amber-500 border border-amber-500/50"
+              ? "bg-amber-500/10 text-yellow-500 border border-yellow-500/50"
               : issue.status === "Resolved"
               ? "bg-green-500/10 text-green-500 border border-green-500/50"
               : "bg-rose-500/10 text-rose-500 border border-rose-500/50"
@@ -52,7 +52,7 @@ export function IssueCard({ issue }: IssueCardProps) {
             issue.priority === "Low"
               ? "bg-green-500/10 text-green-500 border border-green-500/50"
               : issue.priority === "Medium"
-              ? "bg-amber-500/10 text-amber-500 border border-amber-500/50"
+              ? "bg-amber-500/10 text-yellow-500 border border-yellow-500/50"
               : "bg-rose-500/10 text-rose-500 border border-rose-500/50"
           }`}
             >
@@ -68,9 +68,11 @@ export function IssueCard({ issue }: IssueCardProps) {
             <div className="flex items-center space-x-1">
               <Calendar className="h-3 w-3" />
               <span>
-                {new Date(issue.updatedAt) > new Date(issue.createdAt)
-                  ? `Updated ${formatDate(issue.updatedAt)}`
-                  : `Created ${formatDate(issue.createdAt)}`}
+                {issue.updatedAt && issue.createdAt
+                  ? new Date(issue.updatedAt) > new Date(issue.createdAt)
+                    ? `Updated ${formatDate(issue.updatedAt)}`
+                    : `Created ${formatDate(issue.createdAt)}`
+                  : "Date unavailable"}
               </span>
             </div>
 
@@ -89,14 +91,14 @@ export function IssueCard({ issue }: IssueCardProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
                 >
                   <Eye className="h-4 w-4" />
                   <span className="sr-only">View issue</span>
                 </Button>
               </DialogTrigger>
 
-              <DialogContent className=" p-6 rounded-2xl shadow-md  border border-violet-500/50 shadow-violet-400   min-h-[30%] max-h-[90%] overflow-y-scroll">
+              <DialogContent className=" p-6 rounded-2xl shadow-md  border border-violet-500/60 shadow-violet-400/10   min-h-[30%] max-h-[90%] overflow-y-scroll">
                 <div>
                   <h2 className="text-xl font-semibold mb-4">{issue.title}</h2>
                   <p className="text-md text-muted-foreground mb-4 ">
@@ -107,7 +109,7 @@ export function IssueCard({ issue }: IssueCardProps) {
                       className={`px-2 py-0.5 flex items-center justify-center rounded-xl text-sm whitespace-nowrap
                               ${
                                 issue.status === "Open"
-                                  ? "bg-amber-500/10 text-amber-500 border border-amber-500/50"
+                                  ? "bg-amber-500/10 text-yellow-500 border border-yellow-500/50"
                                   : issue.status === "Resolved"
                                   ? "bg-green-500/10 text-green-500 border border-green-500/50"
                                   : "bg-rose-500/10 text-rose-500 border border-rose-500/50"
@@ -122,18 +124,20 @@ export function IssueCard({ issue }: IssueCardProps) {
                                 issue.priority === "Low"
                                   ? "bg-green-500/10 text-green-500 border border-green-500/50"
                                   : issue.priority === "Medium"
-                                  ? "bg-amber-500/10 text-amber-500 border border-amber-500/50"
+                                  ? "bg-amber-500/10 text-yellow-500 border border-yellow-500/50"
                                   : "bg-rose-500/10 text-rose-500 border border-rose-500/50"
                               }`}
-                      >
+                    >
                       {issue.priority}
                     </div>
                   </div>
                   <div className="flex items-center justify-between text-sm text-muted-foreground w-[70%] mt-7">
                     <span>
-                      {new Date(issue.updatedAt) > new Date(issue.createdAt)
-                        ? `Updated ${formatDate(issue.updatedAt)}`
-                        : `Created ${formatDate(issue.createdAt)}`}
+                      {issue.updatedAt && issue.createdAt
+                        ? new Date(issue.updatedAt) > new Date(issue.createdAt)
+                          ? `Updated ${formatDate(issue.updatedAt)}`
+                          : `Created ${formatDate(issue.createdAt)}`
+                        : "Date unavailable"}
                     </span>
 
                     {issue.assignee && (
@@ -152,7 +156,7 @@ export function IssueCard({ issue }: IssueCardProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
                 >
                   <Edit className="h-4 w-4" />
                   <span className="sr-only">Edit issue</span>

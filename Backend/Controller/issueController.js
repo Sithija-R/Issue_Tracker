@@ -14,7 +14,7 @@ const createIssue = async ( req, res) => {
     await newIssue.save();
     res
       .status(201)
-      .json({ message: "Issue created successfully", issue: newIssue });
+      .json({ message: "Issue created successfully", issue: { ...newIssue._doc, id: newIssue._id }});
   } catch (error) {
     res
       .status(500)
@@ -24,10 +24,14 @@ const createIssue = async ( req, res) => {
 
 const getIssues = async (req, res) => {
   try {
-    const issue = await Issue.find();
+    const issues = await Issue.find();
+    const formattedIssues = issues.map((issue) => ({
+      ...issue._doc,
+      id: issue._id,
+    }));
     return res
       .status(201)
-      .json({ message: "Issue fetched successfully", issue });
+      .json({ message: "Issue fetched successfully", issue : formattedIssues });
   } catch (error) {
     return res
       .status(500)
@@ -48,7 +52,7 @@ const updateIssue = async (req, res) => {
     }
     return res
       .status(201)
-      .json({ message: "Issue update successfully", issue });
+      .json({ message: "Issue update successfully", issue: { ...issue._doc, id: issue._id } });
   } catch (error) {
     return res
       .status(500)

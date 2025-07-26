@@ -24,75 +24,16 @@ import {
   CheckCircle,
   AlertTriangle,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { IssueCard } from "@/components/Issuecard";
 import { useIssueStore } from "@/store/Issuestore";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Createissue from "@/components/Createissue";
+import { useIssue } from "@/lib/hooks/useIssue";
 
-
-// Mock data for initial load
-const mockIssues = [
-  {
-    id: "1",
-    title: "Login page not responsive on mobile devices",
-    description:
-      "The login form elements are overlapping and buttons are not properly sized on mobile screens smaller than 768px.",
-    status: "Open" as const,
-    priority: "High" as const,
-    createdAt: "2024-01-15T10:30:00Z",
-    updatedAt: "2024-01-15T14:20:00Z",
-    assignee: "Alex Johnson",
-  },
-  {
-    id: "2",
-    title: "Database connection timeout in production",
-    description:
-      "Users experiencing intermittent 500 errors due to database connection timeouts during peak hours.",
-    status: "In Progress" as const,
-    priority: "Critical" as const,
-    createdAt: "2024-01-14T09:15:00Z",
-    updatedAt: "2024-01-15T11:45:00Z",
-    assignee: "Sarah Chen",
-  },
-  {
-    id: "3",
-    title: "Add dark mode toggle to user preferences",
-    description:
-      "Implement a dark/light mode toggle in the user settings panel with persistence across sessions.",
-    status: "Testing" as const,
-    priority: "Medium" as const,
-    createdAt: "2024-01-13T16:20:00Z",
-    updatedAt: "2024-01-15T09:30:00Z",
-    assignee: "Mike Rodriguez",
-  },
-  {
-    id: "4",
-    title: "Email notification system not working",
-    description:
-      "Users report not receiving email notifications for issue updates and status changes.",
-    status: "Resolved" as const,
-    priority: "High" as const,
-    createdAt: "2024-01-12T11:00:00Z",
-    updatedAt: "2024-01-14T17:15:00Z",
-    assignee: "Emma Davis",
-  },
-  {
-    id: "5",
-    title: "Improve search performance for large datasets",
-    description:
-      "Search functionality becomes slow when dealing with more than 10,000 records. Need to implement pagination and indexing.",
-    status: "Open" as const,
-    priority: "Low" as const,
-    createdAt: "2024-01-11T14:45:00Z",
-    updatedAt: "2024-01-13T10:20:00Z",
-    assignee: "David Kim",
-  },
-];
 
 export default function Dashboard() {
-  const navigate = useNavigate();
+
   const {
     issues,
     setIssues,
@@ -104,14 +45,15 @@ export default function Dashboard() {
     setPriorityFilter,
     getFilteredIssues,
   } = useIssueStore();
+ 
+  const { getIssues } = useIssue();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API call
+ 
     const loadIssues = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      setIssues(mockIssues);
+      await getIssues();
       setIsLoading(false);
     };
 
@@ -141,19 +83,19 @@ export default function Dashboard() {
       hoverBorderClass: "hover:border-violet-500/30",
     },
     {
-      icon: <AlertTriangle className="h-6 w-6 text-amber-500" />,
+      icon: <AlertTriangle className="h-6 w-6 text-yellow-500" />,
       label: "Open",
       value: statusCounts.open,
-      colorClass: "amber-500",
-      bgClass: "bg-amber-500/20",
+      colorClass: "yellow-500",
+      bgClass: "bg-yellow-500/20",
       hoverBorderClass: "hover:border-amber-500/30",
     },
     {
-      icon: <CheckCircle className="h-6 w-6 text-lime-500" />,
+      icon: <CheckCircle className="h-6 w-6 text-green-500" />,
       label: "Resolved",
       value: statusCounts.resolved,
-      colorClass: "lime-500",
-      bgClass: "bg-lime-500/20",
+      colorClass: "green-500",
+      bgClass: "bg-green-500/20",
       hoverBorderClass: "hover:border-lime-500/30",
     },
     {
@@ -170,15 +112,15 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mt-20 mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {[...Array(4)].map((_, i) => (
-              <Card key={i} className="bg-gradient-card border-border/50">
+              <Card key={i} className="bg-gradient-to-r from-gradientcard1 to-gradientcard2 border-border/50">
                 <CardContent className="p-6">
                   <div className="animate-pulse">
-                    <div className="h-4 bg-muted rounded mb-2"></div>
-                    <div className="h-8 bg-muted rounded mb-2"></div>
-                    <div className="h-3 bg-muted rounded w-1/2"></div>
+                    <div className="h-4 bg-input/50 rounded mb-2"></div>
+                    <div className="h-8 bg-input/50 rounded mb-2"></div>
+                    <div className="h-3 bg-input/50 rounded w-1/2"></div>
                   </div>
                 </CardContent>
               </Card>
@@ -186,15 +128,15 @@ export default function Dashboard() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
-              <Card key={i} className="bg-gradient-card border-border/50">
+              <Card key={i} className="bg-gradient-to-r from-gradientcard1 to-gradientcard2 border-border/50">
                 <CardContent className="p-6">
                   <div className="animate-pulse">
-                    <div className="h-4 bg-muted rounded mb-4"></div>
-                    <div className="h-3 bg-muted rounded mb-2"></div>
-                    <div className="h-3 bg-muted rounded mb-4 w-3/4"></div>
+                    <div className="h-4 bg-input/50 rounded mb-4"></div>
+                    <div className="h-3 bg-input/50 rounded mb-2"></div>
+                    <div className="h-3input/50 rounded mb-4 w-3/4"></div>
                     <div className="flex gap-2">
-                      <div className="h-6 bg-muted rounded w-16"></div>
-                      <div className="h-6 bg-muted rounded w-16"></div>
+                      <div className="h-6 bg-input/50 rounded w-16"></div>
+                      <div className="h-6input/50 rounded w-16"></div>
                     </div>
                   </div>
                 </CardContent>
@@ -279,7 +221,7 @@ export default function Dashboard() {
                 value={statusFilter}
                 onValueChange={(value: any) => setStatusFilter(value)}
               >
-                <SelectTrigger className="w-full sm:w-[180px] bg-input/50 border-border/50">
+                <SelectTrigger className="w-full sm:w-[180px] bg-input/50 border-border/50 cursor-pointer">
                   <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
                 <SelectContent className="bg-background  ">
@@ -293,7 +235,7 @@ export default function Dashboard() {
                 value={priorityFilter}
                 onValueChange={(value: any) => setPriorityFilter(value)}
               >
-                <SelectTrigger className="w-full sm:w-[180px] bg-input/50 border-border/50">
+                <SelectTrigger className="w-full sm:w-[180px] bg-input/50 border-border/50 cursor-pointer">
                   <SelectValue placeholder="Filter by priority" />
                 </SelectTrigger>
                 <SelectContent className="bg-background  ">
@@ -307,7 +249,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Issues Grid */}
+     
             
         {filteredIssues.length === 0 ? (
           <Card className="bg-gradient-card border-border/50">
@@ -324,14 +266,22 @@ export default function Dashboard() {
                     ? "Try adjusting your filters to see more results."
                     : "Get started by creating your first issue."}
                 </p>
+                <Dialog>
+                  <DialogTrigger asChild>
+
                 <Button
-                  onClick={() => navigate("/issues/new")}
+                 
                   variant="outline"
                   className="bg-card/50 border-border/50 hover:bg-accent/50"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Create Issue
                 </Button>
+                  </DialogTrigger>
+                  <DialogContent className="min-w-[60%] p-6 rounded-2xl shadow-xl   border max-h-[90%] overflow-y-scroll">
+                <Createissue mode="edit"  />
+              </DialogContent>
+                </Dialog>
               </div>
             </CardContent>
           </Card>
