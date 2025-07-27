@@ -25,8 +25,6 @@ export const useAuth = () => {
         err?.response?.data?.error ||
         "Registration failed";
 
-      console.error("Registration error:", errorMessage);
-
       toast.error("Registration failed", {
         description: errorMessage,
       });
@@ -48,7 +46,6 @@ export const useAuth = () => {
       err?.response?.data?.error ||
       "Registration failed";
 
-    console.error("Registration error:", errorMessage);
 
     toast.error("Registration failed", {
       description: errorMessage,

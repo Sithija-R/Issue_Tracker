@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 
 import { useNavigate } from "react-router-dom";
-import { LogOut, Settings, User, Bug } from "lucide-react";
+import { LogOut,  Bug } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,8 +34,8 @@ export function Header() {
       <div className="flex h-16 items-center justify-between px-4 lg:px-20">
         <div className="flex items-center space-x-6">
           <div className="flex items-center space-x-2">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-primary">
-              <Bug className="h-4 w-4 " />
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-gradient1 to-gradient2 ">
+              <Bug className="h-4 w-4 text-white"  />
             </div>
             <h1 className="text-xl font-bold  bg-gradient-to-r from-gradient1 to-gradient2 bg-clip-text text-transparent  ">
               IssueTracker
@@ -53,7 +53,7 @@ export function Header() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="relative h-9 w-9 rounded-lg bg-card/50 border border-border/50 hover:bg-accent/50"
+                className="relative h-9 w-9 rounded-lg bg-card/50 border border-border/50 hover:bg-accent/50 cursor-pointer"
               >
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-gradient-to-r from-gradient1 to-gradient2  text-primary-foreground text-xs font-medium">  {userInitials}</AvatarFallback>
