@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Save, Edit, Trash } from "lucide-react";
 import { toast } from "sonner";
-import {  type Issue } from "@/store/Issuestore";
+import { type Issue } from "@/store/Issuestore";
 import {
   Dialog,
   DialogClose,
@@ -32,7 +32,7 @@ type IssueFormProps = {
   onSubmit?: (data: Issue) => void;
 };
 
-const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
+const Createissue = ({ mode, initialData }: IssueFormProps) => {
   const { createIssue, updateIssue, deleteIssue } = useIssue();
 
   const [formData, setFormData] = useState<Issue>({
@@ -81,13 +81,18 @@ const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
     setIsLoading(true);
 
     try {
-
       if (mode === "create") {
-        await createIssue(formData.title, formData.description, formData.priority, formData.status, formData.assignee );
+        await createIssue(
+          formData.title,
+          formData.description,
+          formData.priority,
+          formData.status,
+          formData.assignee
+        );
         toast.success("Issue created successfully!");
       } else {
         if (!formData.id) throw new Error("ID is missing");
-       
+
         await updateIssue(
           formData.id,
           formData.title,
@@ -113,7 +118,7 @@ const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
     }
   };
 
-  const handleDelete =  async () => {
+  const handleDelete = async () => {
     setIsDeleteLoading(true);
     try {
       if (!formData.id) throw new Error("ID is missing");
@@ -243,7 +248,7 @@ const Createissue = ({ mode, initialData, onSubmit }: IssueFormProps) => {
                       )}
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[400px]">
+                  <DialogContent className="sm:max-w-[400px] border-rose-500/40">
                     <DialogHeader>
                       <DialogTitle>Confirm Delete</DialogTitle>
                       <DialogDescription>

@@ -30,10 +30,9 @@ import { useIssueStore } from "@/store/Issuestore";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Createissue from "@/components/Createissue";
 import { useIssue } from "@/lib/hooks/useIssue";
-
+import { useTheme } from "@/components/theme-provider";
 
 export default function Dashboard() {
-
   const {
     issues,
     setIssues,
@@ -45,13 +44,13 @@ export default function Dashboard() {
     setPriorityFilter,
     getFilteredIssues,
   } = useIssueStore();
- 
+
   const { getIssues } = useIssue();
+  const { theme } = useTheme();
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
- 
     const loadIssues = async () => {
       await getIssues();
       setIsLoading(false);
@@ -110,12 +109,19 @@ export default function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background mt-20 relative">
+        {theme === "dark" && (
+          <div className="fixed inset-0 bg-[url('/bgimage3.jpg')] bg-cover bg-center bg-no-repeat opacity-7 z-0 pointer-events-none" />
+        )}
+        <div className="fixed inset-0 bg-gradient-to-r from-gradienthero1 to-gradienthero2 mix-blend-multiply z-0 pointer-events-none" />
         <Header />
         <div className="container mt-20 mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {[...Array(4)].map((_, i) => (
-              <Card key={i} className="bg-gradient-to-r from-gradientcard1 to-gradientcard2 border-border/50">
+              <Card
+                key={i}
+                className="bg-gradient-to-r from-gradientcard1 to-gradientcard2 border-border/50"
+              >
                 <CardContent className="p-6">
                   <div className="animate-pulse">
                     <div className="h-4 bg-input/50 rounded mb-2"></div>
@@ -128,7 +134,10 @@ export default function Dashboard() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
-              <Card key={i} className="bg-gradient-to-r from-gradientcard1 to-gradientcard2 border-border/50">
+              <Card
+                key={i}
+                className="bg-gradient-to-r from-gradientcard1 to-gradientcard2 border-border/50"
+              >
                 <CardContent className="p-6">
                   <div className="animate-pulse">
                     <div className="h-4 bg-input/50 rounded mb-4"></div>
@@ -149,13 +158,14 @@ export default function Dashboard() {
   }
 
   return (
-   
-
-    <div className="min-h-screen bg-background mt-20 ">
+    <div className="min-h-screen bg-background mt-20 relative ">
+      {theme === "dark" && (
+        <div className="fixed inset-0 bg-[url('/bgimage3.jpg')] bg-cover bg-center bg-no-repeat opacity-7 z-0 pointer-events-none" />
+      )}
+      <div className="fixed inset-0 bg-gradient-to-r from-gradienthero1 to-gradienthero2 mix-blend-multiply z-0 pointer-events-none" />
       <Header />
 
       <div className="container mx-auto px-4 py-8 h-80 ">
-     
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {cardStat.map((item) => (
             <Card
@@ -179,7 +189,6 @@ export default function Dashboard() {
           ))}
         </div>
 
-
         <Card className="mb-6 bg-gradient-to-r from-gradientcard1 to-gradientcard2  border-border/50">
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -191,16 +200,12 @@ export default function Dashboard() {
               </div>
               <Dialog>
                 <DialogTrigger asChild>
-
-              <Button
-                
-                className=" bg-gradient-to-r from-gradient1 to-gradient2 hover:opacity-90 transition-all duration-200 cursor-pointer p-5 text-lg font-semibold "
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                New Issue
-              </Button>
+                  <Button className=" bg-gradient-to-r from-gradient1 to-gradient2 hover:opacity-90 transition-all duration-200 cursor-pointer p-5 text-lg font-semibold ">
+                    <Plus className="h-4 w-4 mr-2" />
+                    New Issue
+                  </Button>
                 </DialogTrigger>
-                <DialogContent className="min-w-[60%] p-6 rounded-2xl shadow-xl   border max-h-[90%] overflow-y-scroll">
+                <DialogContent className="min-w-[60%] p-6 rounded-2xl shadow-xl   border max-h-[90%] overflow-y-scroll border-violet-500/60">
                   <Createissue mode="create" />
                 </DialogContent>
               </Dialog>
@@ -249,8 +254,6 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-     
-            
         {filteredIssues.length === 0 ? (
           <Card className="bg-gradient-card border-border/50">
             <CardContent className="p-12 text-center">
@@ -268,19 +271,17 @@ export default function Dashboard() {
                 </p>
                 <Dialog>
                   <DialogTrigger asChild>
-
-                <Button
-                 
-                  variant="outline"
-                  className="bg-card/50 border-border/50 hover:bg-accent/50"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Issue
-                </Button>
+                    <Button
+                      variant="outline"
+                      className="bg-card/50 border-border/50 hover:bg-accent/50"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create Issue
+                    </Button>
                   </DialogTrigger>
                   <DialogContent className="min-w-[60%] p-6 rounded-2xl shadow-xl   border max-h-[90%] overflow-y-scroll">
-                <Createissue mode="edit"  />
-              </DialogContent>
+                    <Createissue mode="edit" />
+                  </DialogContent>
                 </Dialog>
               </div>
             </CardContent>
@@ -294,6 +295,5 @@ export default function Dashboard() {
         )}
       </div>
     </div>
-    
   );
 }

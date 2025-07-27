@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Bug, Eye, EyeOff, UserPlus, Lock, Mail, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, EyeOff, UserPlus, Lock, Mail, User } from "lucide-react";
 import { toast } from "sonner";
-import { useAuthStore } from "@/store/Authstore";
 import { useAuth } from "@/lib/hooks/UseAuth";
+import { useTheme } from "@/components/theme-provider";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -23,32 +23,25 @@ const Signup = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const navigate = useNavigate();
-  const { registerUser } = useAuth(); 
+  const { registerUser } = useAuth();
+  const { theme } = useTheme();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    }
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
       newErrors.email = "Email is invalid";
-    }
 
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
+    if (!formData.password) newErrors.password = "Password is required";
+    else if (formData.password.length < 6)
       newErrors.password = "Password must be at least 6 characters";
-    }
 
-    if (!formData.confirmPassword) {
+    if (!formData.confirmPassword)
       newErrors.confirmPassword = "Please confirm your password";
-    } else if (formData.password !== formData.confirmPassword) {
+    else if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -56,7 +49,6 @@ const Signup = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     setIsLoading(true);
@@ -64,13 +56,12 @@ const Signup = () => {
 
     try {
       await registerUser(formData.name, formData.email, formData.password);
-      
       toast.success("Registered Successfully!", {
         description: "Your account has been created successfully.",
       });
       navigate("/dashboard");
     } catch (error) {
-     console.error("Registration error:", error);
+      console.error("Registration error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -78,15 +69,37 @@ const Signup = () => {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }));
-    }
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gradienthero1 to-gradienthero2 p-4">
-      <div className="w-full max-w-md">
-        <Card className="bg-gradientcard1   backdrop-blur shadow-glass border border-gradient1/50">
+    <div className="relative min-h-screen flex flex-col md:flex-row items-center justify-center p-4 lg:px-40">
+      {theme === "dark" && (
+        <div className="fixed inset-0 bg-[url('/bgimage3.jpg')] bg-cover bg-center bg-no-repeat opacity-20 z-0 pointer-events-none" />
+      )}
+
+      <div className="absolute inset-0 bg-gradient-to-r from-gradienthero1 to-gradienthero2 mix-blend-multiply z-0" />
+
+      <div className="w-full md:w-1/2 mb-8 md:mb-0 px-4 text-center md:text-left relative z-10">
+        <div className="flex flex-col items-center md:items-start space-y-4">
+          <div className="flex flex-col items-center space-y-5">
+            <div className="flex items-center justify-center w-20 h-20 rounded-lg bg-gradient-to-r from-gradient1 to-gradient2">
+              <Bug className="h-16 w-16 text-white" />
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold bg-gradient-to-r from-gradient1 to-gradient2 bg-clip-text text-transparent">
+              IssueTracker
+            </h1>
+          </div>
+          <p className="text-muted-foreground max-w-md md:text-lg text-sm">
+            Welcome to IssueTracker — your one-stop platform for managing tasks,
+            tracking progress, and staying productive. Sign in to get started!
+          </p>
+        </div>
+      </div>
+
+      {/* Right Side: Signup Form */}
+      <div className="w-full md:w-1/2 relative z-10 max-w-md">
+        <Card className="bg-gradientcard1 backdrop-blur shadow-glass border border-gradient1/50">
           <CardHeader className="space-y-1 text-center">
             <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-lg bg-gradient-to-r from-gradient1 to-gradient2">
               <UserPlus className="h-6 w-6 text-primary-foreground" />
@@ -97,126 +110,83 @@ const Signup = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm font-medium">
-                  Full Name
-                </Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="name"
-                    type="text"
-                    placeholder="Enter your full name"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="pl-10 bg-input/50 border-border/50 focus:border-primary/50 transition-all duration-200"
-                    disabled={isLoading}
-                  />
-                </div>
-                {errors.name && (
-                  <p className="text-xs text-destructive">{errors.name}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
-                  Email
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="enter@example.com"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    className="pl-10 bg-input/50 border-border/50 focus:border-primary/50 transition-all duration-200"
-                    disabled={isLoading}
-                  />
-                </div>
-                {errors.email && (
-                  <p className="text-xs text-destructive">{errors.email}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">
-                  Password
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Create a password"
-                    value={formData.password}
-                    onChange={(e) =>
-                      handleInputChange("password", e.target.value)
-                    }
-                    className="pl-10 pr-10 bg-input/50 border-border/50 focus:border-primary/50 transition-all duration-200"
-                    disabled={isLoading}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                    onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
+              {["name", "email", "password", "confirmPassword"].map((field) => (
+                <div key={field} className="space-y-2">
+                  <Label
+                    htmlFor={field}
+                    className="text-sm font-medium capitalize"
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    {field === "confirmPassword" ? "Confirm Password" : field}
+                  </Label>
+                  <div className="relative">
+                    {field === "email" && (
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     )}
-                  </Button>
-                </div>
-                {errors.password && (
-                  <p className="text-xs text-destructive">{errors.password}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label
-                  htmlFor="confirmPassword"
-                  className="text-sm font-medium"
-                >
-                  Confirm Password
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm your password"
-                    value={formData.confirmPassword}
-                    onChange={(e) =>
-                      handleInputChange("confirmPassword", e.target.value)
-                    }
-                    className="pl-10 pr-10 bg-input/50 border-border/50 focus:border-primary/50 transition-all duration-200"
-                    disabled={isLoading}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    disabled={isLoading}
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    {field === "name" && (
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     )}
-                  </Button>
+                    {(field === "password" || field === "confirmPassword") && (
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    )}
+                    <Input
+                      id={field}
+                      type={
+                        field.includes("password")
+                          ? field === "password"
+                            ? showPassword
+                              ? "text"
+                              : "password"
+                            : showConfirmPassword
+                            ? "text"
+                            : "password"
+                          : field === "email"
+                          ? "email"
+                          : "text"
+                      }
+                      placeholder={
+                        field === "email"
+                          ? "enter@example.com"
+                          : field.includes("password")
+                          ? field === "password"
+                            ? "Create a password"
+                            : "Confirm your password"
+                          : "Enter your full name"
+                      }
+                      value={formData[field as keyof typeof formData]}
+                      onChange={(e) => handleInputChange(field, e.target.value)}
+                      className="pl-10 pr-10 bg-input/50 border-border/50 focus:border-primary/50 transition-all duration-200"
+                      disabled={isLoading}
+                    />
+                    {(field === "password" || field === "confirmPassword") && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                        onClick={() =>
+                          field === "password"
+                            ? setShowPassword(!showPassword)
+                            : setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        disabled={isLoading}
+                      >
+                        {(
+                          field === "password"
+                            ? showPassword
+                            : showConfirmPassword
+                        ) ? (
+                          <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </Button>
+                    )}
+                  </div>
+                  {errors[field] && (
+                    <p className="text-xs text-destructive">{errors[field]}</p>
+                  )}
                 </div>
-                {errors.confirmPassword && (
-                  <p className="text-xs text-destructive">
-                    {errors.confirmPassword}
-                  </p>
-                )}
-              </div>
+              ))}
 
               <Button
                 type="submit"
@@ -239,7 +209,7 @@ const Signup = () => {
                 Already have an account?{" "}
                 <Link
                   to="/login"
-                  className="text-gradient1  hover:underline font-medium transition-colors duration-200"
+                  className="text-gradient1 hover:underline font-medium transition-colors duration-200"
                 >
                   Sign in
                 </Link>

@@ -11,7 +11,7 @@ type IssueCardProps = {
 
 export function IssueCard({ issue }: IssueCardProps) {
   const formatDate = (dateString?: string) => {
-    if (!dateString) return "Unknown date";
+    if (!dateString) return "Invalid date";
     return new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
@@ -98,7 +98,7 @@ export function IssueCard({ issue }: IssueCardProps) {
                 </Button>
               </DialogTrigger>
 
-              <DialogContent className=" p-6 rounded-2xl shadow-md  border border-violet-500/60 shadow-violet-400/10   min-h-[30%] max-h-[90%] overflow-y-scroll">
+              <DialogContent className=" p-6 rounded-2xl shadow-md  border border-violet-500/60  min-h-[30%] max-h-[90%] overflow-y-scroll">
                 <div>
                   <h2 className="text-xl font-semibold mb-4">{issue.title}</h2>
                   <p className="text-md text-muted-foreground mb-4 ">
@@ -156,14 +156,14 @@ export function IssueCard({ issue }: IssueCardProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer "
                 >
                   <Edit className="h-4 w-4" />
                   <span className="sr-only">Edit issue</span>
                 </Button>
               </DialogTrigger>
 
-              <DialogContent className="min-w-[60%] p-6 rounded-2xl shadow-xl   border max-h-[90%] overflow-y-scroll">
+              <DialogContent className="min-w-[60%] p-6 rounded-2xl shadow-xl   border max-h-[90%] overflow-y-scroll border-violet-500/60">
                 <Createissue mode="edit" initialData={issue} />
               </DialogContent>
             </Dialog>
