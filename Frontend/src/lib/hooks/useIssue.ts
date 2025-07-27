@@ -102,7 +102,7 @@ export const useIssue = () => {
 
   const deleteIssue = async (id: string) => {
     try {
-        const _res = await axios.delete(`${API_BASE_URL}/issue/delete/${id}`, {
+         await axios.delete(`${API_BASE_URL}/issue/delete/${id}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             }
