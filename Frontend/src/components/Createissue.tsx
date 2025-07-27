@@ -134,7 +134,7 @@ const Createissue = ({ mode, initialData }: IssueFormProps) => {
   };
 
   return (
-    <div className="min-w-[50%] px-4 py-8">
+    <div className="">
       <Card className="bg-gradient-card border-border/50 shadow-glass">
         <CardHeader>
           <CardTitle>
@@ -143,7 +143,7 @@ const Createissue = ({ mode, initialData }: IssueFormProps) => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="flex justify-between gap-2">
+            <div className="flex justify-between gap-2 md:flex-row flex-col">
               <div className="space-y-2 w-[80%]">
                 <Label htmlFor="title">Title *</Label>
                 <Input
@@ -205,7 +205,7 @@ const Createissue = ({ mode, initialData }: IssueFormProps) => {
                   handleInputChange("description", e.target.value)
                 }
                 placeholder="Describe the issue in detail"
-                className="!bg-input/80 min-h-[120px] border-border/50 resize-none"
+                className="!bg-input/80 min-h-[120px] border-border/50 "
                 disabled={isLoading}
               />
               {errors.description && (
@@ -225,14 +225,14 @@ const Createissue = ({ mode, initialData }: IssueFormProps) => {
               />
             </div>
 
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-2 pt-4 flex-wrap  md:justify-end flex-col md:flex-row">
               {mode === "edit" && (
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button
                       type="button"
                       variant="destructive"
-                      className="flex-1 cursor-pointer"
+                      className="flex cursor-pointer"
                       disabled={isDeleteLoading}
                     >
                       {isDeleteLoading ? (
@@ -274,7 +274,7 @@ const Createissue = ({ mode, initialData }: IssueFormProps) => {
 
               <Button
                 type="submit"
-                className="flex-1 bg-gradient-to-r from-gradient1 to-gradient2 cursor-pointer"
+                className=" bg-gradient-to-r from-gradient1 to-gradient2 cursor-pointer text-white"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -304,7 +304,7 @@ const Createissue = ({ mode, initialData }: IssueFormProps) => {
                 <Button
                   type="button"
                   variant="outline"
-                  className="bg-card/50 border-border/50 hover:bg-accent/50 cursor-pointer"
+                  className="bg-card/50 border-border/50 hover:bg-accent/50 cursor-pointer w-full"
                   disabled={isLoading}
                 >
                   Cancel
