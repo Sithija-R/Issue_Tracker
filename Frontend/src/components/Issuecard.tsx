@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,18 @@ type IssueCardProps = {
   issue: Issue;
 };
 
+const isMobileDevice = () => {
+  if (typeof navigator === "undefined") return false;
+  return /Mobi|Android|iPhone/i.test(navigator.userAgent);
+};
+
 export function IssueCard({ issue }: IssueCardProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return "Invalid date";
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -91,42 +103,44 @@ export function IssueCard({ issue }: IssueCardProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                  className={`h-8 w-8 transition-opacity duration-200 cursor-pointer ${
+                    isMobile
+                      ? "opacity-100"
+                      : "opacity-0 group-hover:opacity-100"
+                  }`}
                 >
                   <Eye className="h-4 w-4" />
                   <span className="sr-only">View issue</span>
                 </Button>
               </DialogTrigger>
 
-              <DialogContent className=" p-6 rounded-2xl shadow-md  border border-violet-500/60  min-h-[30%] max-h-[90%] overflow-y-scroll">
+              <DialogContent className="p-6 rounded-2xl shadow-md border border-violet-500/60 min-h-[30%] max-h-[90%] overflow-y-scroll">
                 <div>
                   <h2 className="text-xl font-semibold mb-4">{issue.title}</h2>
-                  <p className="text-md text-muted-foreground mb-4 ">
+                  <p className="text-md text-muted-foreground mb-4">
                     {issue.description}
                   </p>
                   <div className="flex flex-wrap gap-2 shrink-0">
                     <div
-                      className={`px-2 py-0.5 flex items-center justify-center rounded-xl text-sm whitespace-nowrap
-                              ${
-                                issue.status === "Open"
-                                  ? "bg-amber-500/10 text-yellow-500 border border-yellow-500/50"
-                                  : issue.status === "Resolved"
-                                  ? "bg-green-500/10 text-green-500 border border-green-500/50"
-                                  : "bg-rose-500/10 text-rose-500 border border-rose-500/50"
-                              }`}
+                      className={`px-2 py-0.5 flex items-center justify-center rounded-xl text-sm whitespace-nowrap ${
+                        issue.status === "Open"
+                          ? "bg-amber-500/10 text-yellow-500 border border-yellow-500/50"
+                          : issue.status === "Resolved"
+                          ? "bg-green-500/10 text-green-500 border border-green-500/50"
+                          : "bg-rose-500/10 text-rose-500 border border-rose-500/50"
+                      }`}
                     >
                       {issue.status}
                     </div>
 
                     <div
-                      className={`px-2 py-0.5 flex items-center justify-center rounded-xl text-sm whitespace-nowrap
-                              ${
-                                issue.priority === "Low"
-                                  ? "bg-green-500/10 text-green-500 border border-green-500/50"
-                                  : issue.priority === "Medium"
-                                  ? "bg-amber-500/10 text-yellow-500 border border-yellow-500/50"
-                                  : "bg-rose-500/10 text-rose-500 border border-rose-500/50"
-                              }`}
+                      className={`px-2 py-0.5 flex items-center justify-center rounded-xl text-sm whitespace-nowrap ${
+                        issue.priority === "Low"
+                          ? "bg-green-500/10 text-green-500 border border-green-500/50"
+                          : issue.priority === "Medium"
+                          ? "bg-amber-500/10 text-yellow-500 border border-yellow-500/50"
+                          : "bg-rose-500/10 text-rose-500 border border-rose-500/50"
+                      }`}
                     >
                       {issue.priority}
                     </div>
@@ -151,19 +165,24 @@ export function IssueCard({ issue }: IssueCardProps) {
               </DialogContent>
             </Dialog>
 
+            {/* Edit Modal */}
             <Dialog>
               <DialogTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer "
+                  className={`h-8 w-8 transition-opacity duration-200 cursor-pointer ${
+                    isMobile
+                      ? "opacity-100"
+                      : "opacity-0 group-hover:opacity-100"
+                  }`}
                 >
                   <Edit className="h-4 w-4" />
                   <span className="sr-only">Edit issue</span>
                 </Button>
               </DialogTrigger>
 
-              <DialogContent className="min-w-[60%] p-6 rounded-2xl shadow-xl   border max-h-[90%] overflow-y-scroll border-violet-500/60">
+              <DialogContent className="min-w-[50%] rounded-2xl shadow-xl border max-h-[90%] overflow-y-scroll border-violet-500/60">
                 <Createissue mode="edit" initialData={issue} />
               </DialogContent>
             </Dialog>
